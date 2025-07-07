@@ -1,75 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Yes/No Fortune Teller</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YES or NO App</title>
   <style>
-    body {
+    :root {
+      --gray: #f0f0f0;
+      --green: #4caf50;
+      --red: #f44336;
+      --transition-duration: 0.5s;
+    }
+
+    body, html {
+      height: 100%;
       margin: 0;
-      height: 100vh;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      background: #ccc;
-      transition: background 1s ease;
-      font-family: sans-serif;
-      flex-direction: column;
+      background-color: var(--gray);
+      transition: background-color var(--transition-duration) ease;
     }
-    #result {
-      font-size: 4rem;
-      opacity: 0;
-      transition: opacity 0.5s ease;
-    }
-    button {
-      padding: 1em 2em;
+
+    #main-button {
+      padding: 20px 40px;
       font-size: 1.5rem;
+      background-color: #333;
+      color: white;
+      border: none;
+      border-radius: 8px;
       cursor: pointer;
+      transition: background-color 0.3s ease;
     }
-    .fade-in {
-      opacity: 1;
+
+    #main-button:hover {
+      background-color: #555;
+    }
+
+    #message {
+      font-size: 6rem;
+      font-weight: bold;
+      color: white;
+      display: none;
+      text-transform: uppercase;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+    }
+
+    #disclaimer {
+      position: absolute;
+      bottom: 10px;
+      font-size: 0.8rem;
+      color: #777;
+      text-align: center;
+      padding: 0 20px;
+      max-width: 90%;
     }
   </style>
 </head>
 <body>
-  <button id="ask-btn">Ask 🎲</button>
-  <div id="result"></div>
-  <p style="position: absolute; bottom: 10px; font-size: 0.8rem; color: #333;">
-    ⚠️ This is for fun only – I take no responsibility if you act on this result.
-  </p>
+
+  <button id="main-button">Press Me</button>
+  <div id="message"></div>
+
+  <div id="disclaimer">
+    I take no responsibility for whatever you choose to do with the answer. By using this website, you implicitly accept this.
+  </div>
 
   <script>
-    const btn = document.getElementById('ask-btn');
-    const res = document.getElementById('result');
-    const initialBg = getComputedStyle(document.body).backgroundColor;
+    const button = document.getElementById('main-button');
+    const message = document.getElementById('message');
+    const body = document.body;
 
-    btn.addEventListener('click', () => {
-      res.textContent = '';
-      res.classList.remove('fade-in');
-      document.body.style.background = initialBg;
+    button.addEventListener('click', () => {
+      // Hide the button
+      button.style.display = 'none';
 
-      // Quick "thinking" animation
-      let dots = 0;
-      const animation = setInterval(() => {
-        res.textContent = 'Thinking' + '.'.repeat(dots % 4);
-        dots++;
-      }, 300);
+      // Randomly choose YES or NO
+      const result = Math.random() < 0.5 ? 'YES' : 'NO';
+      message.textContent = result;
+      message.style.display = 'block';
 
+      // Set background color based on result
+      body.style.backgroundColor = result === 'YES' ? 'var(--green)' : 'var(--red)';
+
+      // Reset after 3 seconds
       setTimeout(() => {
-        clearInterval(animation);
-        const answer = Math.random() < 0.5 ? 'Yes' : 'No';
-        res.textContent = answer;
-        res.classList.add('fade-in');
-        document.body.style.background = answer === 'Yes'
-          ? 'linear-gradient(135deg, #a8e063, #56ab2f)'
-          : 'linear-gradient(135deg, #e53935, #b71c1c)';
-
-        setTimeout(() => {
-          document.body.style.background = initialBg;
-          res.classList.remove('fade-in');
-        }, 3000);
-      }, 2000);
+        body.style.backgroundColor = 'var(--gray)';
+        message.style.display = 'none';
+        button.style.display = 'inline-block';
+      }, 3000);
     });
   </script>
 </body>
 </html>
-

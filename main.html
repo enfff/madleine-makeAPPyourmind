@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Yes/No Fortune Teller</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #ccc;
+      transition: background 1s ease;
+      font-family: sans-serif;
+      flex-direction: column;
+    }
+    #result {
+      font-size: 4rem;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    button {
+      padding: 1em 2em;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    .fade-in {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <button id="ask-btn">Ask 🎲</button>
+  <div id="result"></div>
+  <p style="position: absolute; bottom: 10px; font-size: 0.8rem; color: #333;">
+    ⚠️ This is for fun only – I take no responsibility if you act on this result.
+  </p>
+
+  <script>
+    const btn = document.getElementById('ask-btn');
+    const res = document.getElementById('result');
+    const initialBg = getComputedStyle(document.body).backgroundColor;
+
+    btn.addEventListener('click', () => {
+      res.textContent = '';
+      res.classList.remove('fade-in');
+      document.body.style.background = initialBg;
+
+      // Quick "thinking" animation
+      let dots = 0;
+      const animation = setInterval(() => {
+        res.textContent = 'Thinking' + '.'.repeat(dots % 4);
+        dots++;
+      }, 300);
+
+      setTimeout(() => {
+        clearInterval(animation);
+        const answer = Math.random() < 0.5 ? 'Yes' : 'No';
+        res.textContent = answer;
+        res.classList.add('fade-in');
+        document.body.style.background = answer === 'Yes'
+          ? 'linear-gradient(135deg, #a8e063, #56ab2f)'
+          : 'linear-gradient(135deg, #e53935, #b71c1c)';
+
+        setTimeout(() => {
+          document.body.style.background = initialBg;
+          res.classList.remove('fade-in');
+        }, 3000);
+      }, 2000);
+    });
+  </script>
+</body>
+</html>
+
